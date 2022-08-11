@@ -13,8 +13,15 @@ build_script:
       Add-Content -Path C:\tools\vcpkg\triplets\x64-windows-static.cmake -Value "set(VCPKG_BUILD_TYPE `"release`")" -NoNewline
       if ($lastExitCode -ne 0) { throw "Failed to update vcpkg" }
       vcpkg install openssl:x64-windows-static
-      Set-Location installed\x64-windows-static\tools\openssl
-      7z a $outpath\openssl.zip openssl.exe
 
-artifacts:
-  - path: openssl.zip
+      mkdir c:\src\
+      Set-Location c:\src
+      git clone --depth=1 https://github.com/nmap/nmap
+      set-location c:\src\nmap\mswin32
+      msbuild nmap.sln
+      
+#     Set-Location installed\x64-windows-static\tools\openssl
+#     7z a $outpath\openssl.zip openssl.exe
+
+#artifacts:
+# - path: openssl.zip
