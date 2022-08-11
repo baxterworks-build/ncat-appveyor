@@ -1,11 +1,14 @@
 #based on https://github.com/Hoikas/PlasmaPrefix/blob/681287437d022a8fb9e4560c3a41a8ab2cb71b54/appveyor.yml
 version: '{build}'
-
+env:
+  - APPVEYOR_SAVE_CACHE_ON_ERROR: true
+ 
 image:
   - Visual Studio 2022
 
 build_script:
   - ps: |
+      $env:VCPKG_DEFAULT_TRIPLET="x64-windows-static"
       $outpath = (Get-Location).Path
       Set-Location C:\tools\vcpkg
       git pull 2> $null
@@ -13,7 +16,8 @@ build_script:
       Add-Content -Path C:\tools\vcpkg\triplets\x64-windows-static.cmake -Value "set(VCPKG_BUILD_TYPE `"release`")" -NoNewline
       if ($lastExitCode -ne 0) { throw "Failed to update vcpkg" }
       vcpkg install openssl:x64-windows-static
-
+      vcpkg install libpcap:x64-windows-static
+     
       mkdir c:\src\
       Set-Location c:\src
       git clone --depth=1 https://github.com/nmap/nmap
@@ -25,3 +29,6 @@ build_script:
 
 #artifacts:
 # - path: openssl.zip
+
+cache:
+  - c:\tools\vcpkg\installed
