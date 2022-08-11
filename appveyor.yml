@@ -3,27 +3,27 @@ version: '{build}'
 environment:
   APPVEYOR_SAVE_CACHE_ON_ERROR: true
 
-#cache:
-#  - c:\tools\vcpkg\installed
+cache:
+  - c:\tools\vcpkg\installed
   
 image:
   - Visual Studio 2022
 
 build_script:
   - ps: |
-      Get-Location
       $env:VCPKG_TARGET_TRIPLET="x64-windows-static"
-      $outpath = (Get-Location).Path
       Set-Location C:\tools\vcpkg
       git pull 2> $null
       bootstrap-vcpkg.bat
       Add-Content -Path C:\tools\vcpkg\triplets\x64-windows-static.cmake -Value "set(VCPKG_BUILD_TYPE `"release`")" -NoNewline
       if ($lastExitCode -ne 0) { throw "Failed to update vcpkg" }
+      
       vcpkg install openssl:x64-windows-static
-      vcpkg install libpcap:x64-windows-static
+      #vcpkg install libpcap:x64-windows-static
      
       mkdir c:\src\
       Set-Location c:\src
       git clone --depth=1 https://github.com/nmap/nmap
       set-location c:\src\nmap\mswin32
-      msbuild /target:ncat nmap.sln
+      curl.exe -o c:\vcpkg\installed\x64-windows-static\include\openssl\applink.c  https://raw.githubusercontent.com/openssl/openssl/openssl-3.0.5/ms/applink.c
+      msbuild /target:ncat nmap.sln /p:IncludePath="c:\vcpkg\installed\x64-windows-static\include"
