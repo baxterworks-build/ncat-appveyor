@@ -3,8 +3,8 @@ version: '{build}'
 environment:
   APPVEYOR_SAVE_CACHE_ON_ERROR: true
 
-cache:
-  - c:\tools\vcpkg\installed
+#cache:
+#  - c:\tools\vcpkg\installed
   
 image:
   - Visual Studio 2022
@@ -12,7 +12,7 @@ image:
 build_script:
   - ps: |
       Get-Location
-      $env:VCPKG_DEFAULT_TRIPLET="x64-windows-static"
+      $env:VCPKG_TARGET_TRIPLET="x64-windows-static"
       $outpath = (Get-Location).Path
       Set-Location C:\tools\vcpkg
       git pull 2> $null
