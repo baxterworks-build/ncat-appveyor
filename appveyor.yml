@@ -1,7 +1,7 @@
 #based on https://github.com/Hoikas/PlasmaPrefix/blob/681287437d022a8fb9e4560c3a41a8ab2cb71b54/appveyor.yml
 version: '{build}'
 environment:
-  - APPVEYOR_SAVE_CACHE_ON_ERROR: true
+  APPVEYOR_SAVE_CACHE_ON_ERROR: true
 
 cache:
   - c:\tools\vcpkg\installed
