@@ -11,6 +11,7 @@ image:
 
 build_script:
   - ps: |
+      Get-Location
       $env:VCPKG_DEFAULT_TRIPLET="x64-windows-static"
       $outpath = (Get-Location).Path
       Set-Location C:\tools\vcpkg
@@ -25,4 +26,4 @@ build_script:
       Set-Location c:\src
       git clone --depth=1 https://github.com/nmap/nmap
       set-location c:\src\nmap\mswin32
-      msbuild nmap.sln
+      msbuild /target:ncat nmap.sln
